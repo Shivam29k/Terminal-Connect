@@ -3,6 +3,7 @@ const { User } = require("../database/db");
 const jwt = require("jsonwebtoken");
 const zod = require("zod");
 const { authMiddleware } = require("../middleware/middleware");
+const { get } = require("mongoose");
 
 const browserRouter = express.Router();
 
@@ -34,7 +35,7 @@ browserRouter.post("/signup", async (req, res) => {
       res.status(403).json({
         message: "Username or Email already exists",
       });
-    }else {
+    } else {
       console.log(e);
       res.status(500).json({
         message: "Internal server error while signup",
@@ -73,6 +74,21 @@ browserRouter.post("/signin", async (req, res) => {
   return res.json({ token });
 });
 
+// get user details
+// get user details
+browserRouter.get("/user", authMiddleware, async (req, res) => {
+  const { username } = req;
+  const user = await User.findOne(
+    { username },
+    { name: true, email: true, username: true }
+  );
+  if (!user) {
+    return res.status(403).json({
+      message: "User not found",
+    });
+  }
+  return res.json(user);
+});
 
 // send chat message
 const chatSchema = zod.object({
@@ -110,7 +126,7 @@ browserRouter.post("/sendchat", authMiddleware, async (req, res) => {
     );
 
     return res.status(200).json({
-      message: "Chat message sent",
+      message: "Message sent",
     });
   } catch (e) {
     console.log(e);
@@ -120,6 +136,36 @@ browserRouter.post("/sendchat", authMiddleware, async (req, res) => {
   }
 });
 
+// get chat messages
+browserRouter.get("/getchat", authMiddleware, async (req, res) => {
+  const { username } = req;
+  const user = await User.findOne({ username });
+  if (!user) {
+    return res.status(403).json({
+      message: "User not found",
+    });
+  }
+  const chatMessages = user.chat.map(({ sender, message }) => ({
+    sender,
+    message,
+  }));
+  return res.json(chatMessages);
+});
 
+// clear chat route
+browserRouter.delete("/clearchat", authMiddleware, async (req, res) => {
+  const { username } = req;
+  try {
+    await User.updateOne({ username }, { $set: { chat: [] } });
+    return res.status(200).json({
+      message: "Chat cleared",
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      message: "Internal server error while clearing chat",
+    });
+  }
+});
 
 module.exports = { browserRouter };

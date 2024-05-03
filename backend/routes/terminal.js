@@ -2,49 +2,54 @@ const express = require("express");
 const { User } = require("../database/db");
 const jwt = require("jsonwebtoken");
 const zod = require("zod");
-const { authMiddleware } = require("../middleware/middleware");
+const { get } = require("mongoose");
 
 const terminalRouter = express.Router();
 
-// signin route
-const signInBody = zod.object({
+// verify user
+const verifySchema = zod.object({
   username: zod.string(),
   password: zod.string(),
 });
-
-terminalRouter.get("/", (req, res) => {
-
-    
-  res.send("Terminal route");
-});
-
-terminalRouter.post("/signin", async (req, res) => {
+terminalRouter.post("/verify", async (req, res) => {
   console.log(req.body);
-  const validInputs = signInBody.safeParse(req.body);
+  const validInputs = verifySchema.safeParse(req.body);
   if (!validInputs.success) {
     return res.status(403).json({
       message: "Incorrect inputs",
     });
   }
-  const { username, password } = validInputs.data;
 
-  const user = await User.findOne({ username, password });
-  if (!user) {
-    return res.status(403).json({
-      message: "Incorrect username or password",
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({ username, password });
+    if (!user) {
+      return res.status(403).json({
+        message: "Invalid username or password",
+        verified: false,
+      });
+    }
+    return res.status(200).json({
+      message: "User verified",
+      verified: true,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      message: "Internal server error while verifying user",
+      verified: false,
     });
   }
-
-  const token = jwt.sign({ username }, process.env.JWT_SECRET);
-  return res.json({ token });
 });
 
-// send chat message
 const chatSchema = zod.object({
   message: zod.string().min(1),
   sender: zod.string(),
+  username: zod.string(),
+  password: zod.string(),
 });
-terminalRouter.post("/sendchat", authMiddleware, async (req, res) => {
+
+terminalRouter.post("/sendchat", async (req, res) => {
   const validInputs = chatSchema.safeParse(req.body);
   if (!validInputs.success) {
     return res.status(403).json({
@@ -52,8 +57,7 @@ terminalRouter.post("/sendchat", authMiddleware, async (req, res) => {
     });
   }
 
-  const { message, sender } = req.body;
-  const { username } = req;
+  const { message, sender, username, password } = req.body;
 
   if (!message && !sender) {
     return res.status(403).json({
@@ -81,6 +85,87 @@ terminalRouter.post("/sendchat", authMiddleware, async (req, res) => {
     console.log(e);
     return res.status(500).json({
       message: "Internal server error while sending chat message",
+    });
+  }
+});
+
+// get chat messages
+getChatSchema = zod.object({
+  username: zod.string(),
+  password: zod.string(),
+});
+
+terminalRouter.get("/getchat", async (req, res) => {
+  const params = req.query;
+  console.log(params);
+  const validInputs = getChatSchema.safeParse(params);
+  if (!validInputs.success) {
+    return res.status(403).json({
+      message: "Incorrect inputs",
+    });
+  }
+  try {
+    const user = await User.findOne({
+      username: params.username,
+      password: params.password,
+    });
+    if (!user) {
+      return res.status(403).json({
+        message: "User not found",
+      });
+    }
+    const chat = user.chat.map((c) => {
+      return {
+        sender: c.sender,
+        message: c.message,
+      };
+    });
+    return res.status(200).json(chat);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      message: "Internal server error while getting chat messages",
+    });
+  }
+});
+
+
+// clear chat 
+clearChatSchema = zod.object({
+  username: zod.string(),
+  password: zod.string(),
+});
+terminalRouter.delete("/clearchat", async (req, res) => {
+  const validInputs = clearChatSchema.safeParse(req.body);
+  if (!validInputs.success) {
+    return res.status(403).json({
+      message: "Incorrect inputs",
+    });
+  }
+
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({ username, password });
+    if (!user) {
+      return res.status(403).json({
+        message: "User not found",
+      });
+    }
+    await User.updateOne(
+      { username, password },
+      {
+        $set: {
+          chat: [],
+        },
+      }
+    );
+    return res.status(200).json({
+      message: "Chat cleared",
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      message: "Internal server error while clearing chat",
     });
   }
 });

@@ -35,7 +35,7 @@ function Auth({ type }: { type: "signup" | "signin" }) {
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           coustomAlert("success", "User created Successfully.");
-          navigate("/blogs");
+          navigate("/dashboard");
         })
         .catch((err) => {
           setLoading(false);
@@ -54,7 +54,7 @@ function Auth({ type }: { type: "signup" | "signin" }) {
           localStorage.setItem("token", res.data.token);
           // alert("User signed in successfully");
           coustomAlert("success", "User signed in successfully.");
-          navigate("/blogs");
+          navigate("/dashboard");
         })
         .catch((err) => {
           setLoading(false);
