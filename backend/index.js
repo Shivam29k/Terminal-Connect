@@ -16,6 +16,9 @@ app.get("/", (req, res) => {
 app.get("/file", (req, res) => {
   res.download("main.exe");
 });
+app.get("/app", (req, res) => {
+  res.download("Tc.jar");
+});
 
 app.use("/api/browser", browserRouter);
 app.use("/api/terminal", terminalRouter);
