@@ -3,25 +3,33 @@ const {browserRouter} = require("./routes/browser");
 const {terminalRouter} = require("./routes/terminal");
 const PORT = process.env.PORT || 3001;
 const cors = require("cors");
+const path = require("path");
+const publicDir = path.join(__dirname, 'public');
+
+
+
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use("/api/browser", browserRouter);
+app.use("/api/terminal", terminalRouter);
 
 
 app.get("/", (req, res) => {
   res.send("Backend is up!");
 });
 
-app.get("/file", (req, res) => {
-  res.download("main.exe");
-});
-app.get("/app", (req, res) => {
-  res.download("Tc.jar");
-});
+app.get('/app', (req, res) => {
+  res.setHeader('Content-Disposition', 'attachment; filename=Tc.jar');
+  res.setHeader('Content-Type', 'application/java-archive');
+  res.sendFile(path.join(publicDir, 'Tc.jar'));
+  
+})
 
-app.use("/api/browser", browserRouter);
-app.use("/api/terminal", terminalRouter);
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
