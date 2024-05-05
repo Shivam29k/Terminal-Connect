@@ -21,9 +21,9 @@ app.get("/", (req, res) => {
 });
 
 app.get('/app', (req, res) => {
-  res.setHeader('Content-Disposition', 'attachment; filename=Tc.jar');
+  res.setHeader('Content-Disposition', 'attachment; filename=Terminal_Connect.jar');
   res.setHeader('Content-Type', 'application/java-archive');
-  res.sendFile(path.join(publicDir, 'Tc.jar'));
+  res.sendFile(path.join(publicDir, 'Terminal_Connect.jar'));
   
 })
 
