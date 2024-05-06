@@ -52,7 +52,7 @@ const User = mongoose.model("users", {
 ],
   credits: {
     type: Number,
-    default: 100,
+    default: 5,
   },
 });
 
