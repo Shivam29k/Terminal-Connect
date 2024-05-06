@@ -14,7 +14,7 @@ function Buy() {
   const navigate = useNavigate();
   !token && navigate("/");
 
-  const { plan } = useParams();
+  const { plan = 'default' } = useParams();
   !plan && navigate("/");
   plan !== "basic" &&
     plan !== "standard" &&
@@ -152,20 +152,9 @@ function Card({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-function CardInput({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex flex-col w-full border-b pb-2 border-gray-600 w-">
-      <span className="text- text-gray-300 font-medium">{label}</span>
-      <input
-        className={`font-medium rounded-md mt-2 border-black ring-black bg-slate-700 p-2`}
-        placeholder={value}
-        required
-      ></input>
-    </div>
-  );
-}
 
-function planDetails(planName: string | undefined) {
+
+function planDetails(planName: string ) {
   if (planName === "basic") {
     return {
       price: 169,
@@ -180,6 +169,11 @@ function planDetails(planName: string | undefined) {
     return {
       price: 499,
       credits: 50,
+    };
+  }else {
+    return {
+      price: 0,
+      credits: 0,
     };
   }
 }
