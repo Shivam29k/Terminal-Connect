@@ -3,6 +3,7 @@ const { User } = require("../database/db");
 const jwt = require("jsonwebtoken");
 const zod = require("zod");
 const { get } = require("mongoose");
+const { decrementCredits } = require("../middleware/middleware");
 
 const terminalRouter = express.Router();
 
@@ -69,15 +70,16 @@ terminalRouter.post("/sendchat", async (req, res) => {
     await User.updateOne(
       { username },
       {
-        $push: {
-          chat: {
-            sender,
-            message,
-          },
+      $push: {
+        chat: {
+        sender,
+        message,
         },
+      },
+      $inc: { credits: -1 },
       }
     );
-
+    decrementCredits(username);
     return res.status(200).json({
       message: "Chat message sent",
     });

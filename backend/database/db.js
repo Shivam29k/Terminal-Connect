@@ -32,6 +32,14 @@ const User = mongoose.model("users", {
     trim: true,
     lowercase: true,
   },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  paid: {
+    type: Boolean,
+    default: false,
+  },
  chat: [
   {
     sender: {
@@ -42,10 +50,46 @@ const User = mongoose.model("users", {
     },
   },
 ],
-  msgCount: {
+  credits: {
     type: Number,
     default: 100,
   },
 });
 
-module.exports = { User };
+
+const Payment = mongoose.model("payments", {
+  username: {
+    type: String,
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+  },
+  upiId: {
+    type: String,
+    required: true,
+  },
+  credits: {
+    type: Number,
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+  },
+  plan: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+});
+
+module.exports = { User, Payment };

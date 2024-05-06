@@ -5,6 +5,7 @@ interface User {
     username: string;
     email: string;
     _id: string;
+    credits: number;
 }
 
 export const userAtom = atom<User>({
@@ -13,6 +14,7 @@ export const userAtom = atom<User>({
         name: '',
         username: '',
         email: '',
-        _id: ''
+        _id: '',
+        credits: 0
     }
 });
