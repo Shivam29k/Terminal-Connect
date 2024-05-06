@@ -19,9 +19,9 @@ function DashBoard() {
       <div className="flex justify-center mb-6">
         <Welcome />
       </div>
-      <div className="grid grid-cols-5">
-        <UserChat className="col-span-4" />
-        <UserAccInfo className="col-span-1" />
+      <div className="md:grid grid-cols-7">
+        <UserChat className="col-span-5" />
+        <UserAccInfo className="col-span-2" />
       </div>
     </div>
   );
@@ -129,7 +129,7 @@ function UserChat({ className: classx }: { className?: string }) {
   };
 
   const sendMessage = () => {
-    user.credits < 1 && coustomAlert("error", "You don't have enough credits to send the message, Please buy credits to continue.");
+    if(user.credits < 1) return coustomAlert("error", "You don't have enough credits to send the message, Please buy credits to continue.");
     axios
       .post(
         `${BACKEND_URL}/api/browser/sendchat`,

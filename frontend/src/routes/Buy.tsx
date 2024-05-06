@@ -54,10 +54,10 @@ function Buy() {
   return (
     <div className="bg-[#1C1C1C] min-h-[100vh] px-4 lg:px-28 py-24 text-white">
       <Navbar />
-      <h1 className="text-3xl font-bold underline underline-offset-8 decoration-emerald-400 text-emerald-400 decoration-4">
+      <h1 className="text-3xl font-bold underline underline-offset-8 decoration-emerald-400 text-emerald-400 decoration-4 container">
         Buy Credits
       </h1>
-
+      <Instructions />
       <div className="grid grid-cols-1 lg:grid-cols-2  mt-14 lg:mt-2 gap-8">
         <div className="flex flex-col items-center justify-center">
           <img src={qrCode} alt="qr code" className="w-1/2" />
@@ -86,7 +86,7 @@ function Buy() {
               </label>
               <input
                 type="file"
-                className="text-gray-300 p-2 rounded-md border border-gray-500"
+                className="text-gray-300  pt-1 rounded-md "
                 accept="image/*"
                 required
                 onChange={(event) => {
@@ -122,26 +122,30 @@ function Buy() {
           </form>
         </div>
       </div>
-      <div className="py-4">
-        <h4 className="text-lg font-medium text-gray-400">Instructions</h4>
-        <ul className="text-gray-400">
-          <li>Step 1: Scan the QR code and pay via any UPI app.</li>
-          <li>
-            Step 2: Scan enter your UPI ID and Upload payment screentshot.
-          </li>
-          <li>Step 3: Your payment will be verified soon.</li>
-          <li>Step 4: Credits will be added to your account.</li>
-          <li>Step 5: You will be notified via Email.</li>
-          <li>
-            Step 6: If the process takes time then contact{" "}
-            <a href="mailto:tc@shivamk.tech" className="text-blue-300 italic">
-              tc@shivamk.tech
-            </a>
-          </li>
-        </ul>
-      </div>
+      
     </div>
   );
+}
+
+function Instructions() {
+  return <div className="py-4 container">
+  <h4 className="text-lg font-medium text-gray-400">Instructions</h4>
+  <ul className="text-gray-400">
+    <li>Step 1: Scan the QR code and pay via any UPI app.</li>
+    <li>
+      Step 2: Scan enter your UPI ID and Upload payment screentshot.
+    </li>
+    <li>Step 3: Your payment will be verified soon.</li>
+    <li>Step 4: Credits will be added to your account.</li>
+    <li>Step 5: You will be notified via Email.</li>
+    <li>
+      Step 6: If the process takes time then contact{" "}
+      <a href="mailto:tc@shivamk.tech" className="text-blue-300 italic">
+        tc@shivamk.tech
+      </a>
+    </li>
+  </ul>
+</div>
 }
 
 function Card({ label, value }: { label: string; value: string }) {

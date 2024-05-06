@@ -44,11 +44,11 @@ function Navbar() {
 
   return (
     <div className="bg-[#1C1C1C] text-[#3ECF8E] flex justify-between  items-center px-4 lg:px-28 py-2 border-b border-gray-600 absolute w-full top-0 left-0">
-      <div className="flex items-center gap-4 cursor-pointer" onClick={()=>navigate("/")}>
+      <div className="flex items-center gap-2 md:gap-4 cursor-pointer" onClick={()=>navigate("/")}>
         <img src={logo} alt="logo" className="h-10" />
-        <h4 className="font-bold">Terminal-Connect</h4>
+        <h4 className="font-bold text-sm">Terminal-Connect</h4>
       </div>
-      <div className="flex gap-3">
+      <div className="flex gap-1 md:gap-3">
         {token ? (
           <>
             <NavbarButton label="contact" onClick={contact} classx="hover:decoration-green-500 hover:text-green-500" />
@@ -71,11 +71,11 @@ function Navbar() {
               onClick={signup}
               classx="hover:decoration-green-500 hover:text-green-500"
             />
-            <NavbarButton
+            {/* <NavbarButton
               label="contact"
               onClick={contact}
               classx="hover:decoration-green-500 hover:text-green-500"
-            />
+            /> */}
           </>
         )}
       </div>

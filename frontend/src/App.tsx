@@ -7,6 +7,7 @@ import { RecoilRoot } from "recoil";
 import Buy from "./routes/Buy";
 import Payments from "./routes/Payments";
 
+
 function App() {
   return (
     <RecoilRoot>
@@ -18,6 +19,7 @@ function App() {
           <Route path="/dashboard" element={<DashBoard />} />
           <Route path="/buy/:plan" element={<Buy />} />
           <Route path="/payments" element={<Payments />} />
+
           <Route path="*" element={<div>Not Found</div>} />
         </Routes>
       </BrowserRouter>
