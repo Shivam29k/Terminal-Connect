@@ -68,7 +68,7 @@ function Home() {
         </div>
       </div>
 
-      <div className="w-5/6 py-8">
+      {/* <div className="w-5/6 py-8">
         <iframe
           className="w-full h-[30vh]  md:h-[60vh] lg:h-[80vh]"
           src="https://www.youtube.com/embed/diOEtiOT-VA?si=nxkuj4PPFYQwQ-Gg"
@@ -77,7 +77,7 @@ function Home() {
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
         ></iframe>
-      </div>
+      </div> */}
       <Footer />
     </div>
   );
