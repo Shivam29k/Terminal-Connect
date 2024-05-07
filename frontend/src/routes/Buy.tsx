@@ -167,12 +167,12 @@ function planDetails(planName: string ) {
   } else if (planName === "standard") {
     return {
       price: 299,
-      credits: 20,
+      credits: 50,
     };
   } else if (planName === "premium") {
     return {
       price: 499,
-      credits: 50,
+      credits: 100,
     };
   }else {
     return {
